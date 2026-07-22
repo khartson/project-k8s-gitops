@@ -2,18 +2,17 @@ apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
   name: cluster-services
-  namespace: argocd 
+  namespace: argocd
 spec:
-  project: default 
+  project: default
   source:
-   repoURL: https://github.com/khartson/project-k8s-gitops.git 
+    repoURL: https://github.com/khartson/project-k8s-gitops.git
     targetRevision: HEAD
     path: cluster-services
   destination:
     server: https://kubernetes.default.svc
-    namespace: argocd 
+    namespace: argocd
   syncPolicy:
     automated:
-      prune: true 
+      prune: true
       selfHeal: true
-
