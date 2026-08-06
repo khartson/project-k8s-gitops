@@ -1,9 +1,9 @@
 apiVersion: v2
 name: tailscale-operator-wrapper
-description: Wrapper chart or configuration for Tailscale  
+description: Wrapper chart or configuration for Tailscale
 type: application
-version: 0.1.0 
-dependencies: 
-  - name: tailscale-operator 
+version: 0.1.0
+dependencies:
+  - name: tailscale-operator
     version: 1.98.9
     repository: https://pkgs.tailscale.com/helmcharts
