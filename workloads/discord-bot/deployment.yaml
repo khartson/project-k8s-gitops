@@ -13,6 +13,13 @@ spec:
       labels:
         app: discord-bot
     spec:
+      template:
+        spec:
+          securityContext:
+            runAsUser: 10001
+            runAsGroup: 10001
+            fsGroup: 10001
+            fsGroupChangePolicy: "Always"  # Forces Kubelet to fix permissions on mount
       securityContext:
         runAsUser: 10001
         runAsGroup: 10001
