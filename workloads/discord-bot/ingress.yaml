@@ -1,0 +1,12 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: discord-bot-ingress
+  namespace: discord-bot
+spec:
+  ingressClassName: tailscale
+  defaultBackend:
+    service:
+      name: discord-bot-service
+      port:
+        number: 8080

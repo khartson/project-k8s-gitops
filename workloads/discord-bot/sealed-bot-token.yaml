@@ -1,0 +1,13 @@
+---
+apiVersion: bitnami.com/v1alpha1
+kind: SealedSecret
+metadata:
+  name: discord-bot-secret
+  namespace: discord-bot
+spec:
+  encryptedData:
+    BOT_TOKEN: AgCOc0nTqtwvF/D8Ir1Oy9Q5NrVg9RHTna3IEEe88I2vwryeNN3TkOW8JRB3FhFDXpn4R7oWAYiltwhD9dJ851Jrxxmap5YU6h41LuaDF0VKIYOyKrP69v9h0fr3nR+r142Ny2ggvt0sRCbUzVyguab8JF4J/nFkjgLD6nq8xVKfPncgDWWFGsnX1AV72HmRAOBlKYWGORQuOWG2U8AtHWLImYxQjeVjA2jHqybABICw5qQMC4pY6L6jpIecONm2KwqYAjDB1fFzsD/OTJIyf9UFOZ0Fi7WI4hmxfnZZr6XS+DDq65UbDOfShNTX8hRfApaGFpK3unOfp1ZK+MIP8mPfY/9lDYSrAxqebvOR85MUpsx8VfM+xg6sbqIanhfgjCHdetVUFmeoeoG3LsAQvAP9vev+jwl50vBtTyMz6fyZoro9eNTMLlMRhz3uauEXTYJW2pmz21ZS0IrOocTTrUUJiJSkKL0hYYIcgJ6KEQfVKhtW+/Q00XxJ2l+e2SLupgFS6EigHKGSkcx0zE/ge/2/fxGI19hf85eoqrpYy6abK2bu2F/74acDkE5nu6ArVbovIgj5iWokSfmyKxoCQyeaDL+k+G5I2hemqkUW2o+3SLDfMC9bp/ioMAdY5RNARk1n3/NXhq7gY4YsLOuwAOhFNPLCPSTPm2q+oi1JsgxKsIZj81yhQ4l3K14+H4k8eLWNY7jS76QmaaALrAl2qC0UUFEXPspEN+bvqUGTN6CE+ZxUg+jP1u7EWsN50z6sJMR/sp5MQP7ml+ZzeA==
+  template:
+    metadata:
+      name: discord-bot-secret
+      namespace: discord-bot
