@@ -17,7 +17,7 @@ spec:
         - name: ghcr-pull-secret
       containers:
         - name: discord-bot
-          image: ghcr.io/khartson/discord-bot:latest
+          image: ghcr.io/khartson/beerbot:latest
           ports:
             - containerPort: 8080
           env:
