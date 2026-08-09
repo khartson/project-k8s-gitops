@@ -7,14 +7,20 @@ spec:
   project: default
   source:
     repoURL: 'https://charts.longhorn.io'
-    targetRevision: 1.12.0 # Replace with your desired Longhorn version
+    targetRevision: 1.12.0
     chart: longhorn
     helm:
       values: |
         preUpgradeChecker:
           jobEnabled: false
+        ingress:
+          enabled: true
+          ingressClassName: tailscale
+          host: longhorn
+          tls: true
+          path: /
   destination:
-    server: 'https://default.svc'
+    server: 'https://kubernetes.default.svc' # Fixed K8s cluster API endpoint
     namespace: longhorn-system
   syncPolicy:
     automated:
