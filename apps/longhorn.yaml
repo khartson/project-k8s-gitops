@@ -6,7 +6,7 @@ metadata:
 spec:
   project: default
   source:
-    repoURL: 'https://charts.longhorn.io'
+    repoURL: "https://charts.longhorn.io"
     targetRevision: 1.12.0
     chart: longhorn
     helm:
@@ -20,11 +20,15 @@ spec:
           tls: true
           path: /
   destination:
-    server: 'https://kubernetes.default.svc' # Fixed K8s cluster API endpoint
+    server: "https://kubernetes.default.svc"
     namespace: longhorn-system
   syncPolicy:
     automated:
       prune: true
       selfHeal: true
+    managedNamespaceMetadata:
+      labels:
+        pod-security.kubernetes.io/enforce: privileged
+        pod-security.kubernetes.io/enforce-version: latest
     syncOptions:
       - CreateNamespace=true
