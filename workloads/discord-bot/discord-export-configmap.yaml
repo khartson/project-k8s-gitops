@@ -1,0 +1,43 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: discord-exporter-script
+  namespace: discord-bot
+  annotations:
+    argocd.argoproj.io/sync-wave: "1"
+data:
+  run-exporter.sh: |
+    #!/bin/sh
+    set -eu
+
+    SERVICE_URL="${SERVICE_URL:-http://discord-bot-service.discord-bot.svc.cluster.local:8080/upload}"
+    OUT_DIR="/out"
+
+    echo "Uploading Discord export JSON from ${OUT_DIR} to ${SERVICE_URL}..."
+
+    if [ -z "$(find "${OUT_DIR}" -type f -name '*.json' -print -quit)" ]; then
+      echo "No new messages were found in the specified lookback window."
+      exit 0
+    fi
+
+    find "${OUT_DIR}" -type f -name '*.json' -exec sh -c '
+      service_url="$1"
+      shift
+      for file do
+        echo "Uploading: ${file}"
+        response_code=$(curl -s -o /dev/null -w "%{http_code}" -X POST "${service_url}" \
+          -F "file=@${file}")
+        case "${response_code}" in
+          2??)
+            echo "Successfully uploaded ${file} (HTTP ${response_code})"
+            ;;
+          *)
+            echo "Failed to upload ${file} (HTTP ${response_code})" >&2
+            exit 1
+            ;;
+        esac
+      done
+    ' sh "${SERVICE_URL}" {} +
+
+    rm -rf "${OUT_DIR:?}"/*
+    echo "Discord export job finished successfully."

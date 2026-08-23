@@ -1,0 +1,92 @@
+# https://kubernetes.io/docs/concepts/workloads/controllers/cron-jobs/
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: discord-export-job
+  namespace: discord-bot
+  annotations:
+    argocd.argoproj.io/sync-wave: "2"
+spec:
+  schedule: "0 2 * * *"
+  concurrencyPolicy: Forbid
+  successfulJobsHistoryLimit: 3
+  failedJobsHistoryLimit: 5
+  jobTemplate:
+    spec:
+      template:
+        metadata:
+          labels:
+            app: discord-export
+        spec:
+          restartPolicy: OnFailure
+          securityContext:
+            runAsUser: 1000
+            runAsGroup: 1000
+            fsGroup: 1000
+            seccompProfile:
+              type: RuntimeDefault
+          initContainers:
+            - name: exporter
+              image: tyrrrz/discordchatexporter:2.47.3
+              command: ["/bin/sh", "-c"]
+              args:
+                - |
+                  set -e
+                  AFTER_DATE=$(date -u -d "${LOOKBACK_DAYS:-1} days ago 2 hours ago" +'%Y-%m-%d %H:%M:%S')
+                  echo "Exporting channels for messages after: ${AFTER_DATE}"
+
+                  DiscordChatExporter.Cli export \
+                    -t "${BOT_TOKEN}" \
+                    -c ${CHANNELS} \
+                    -f Json \
+                    -o "/out/%g/%c.json" \
+                    --after "${AFTER_DATE}"
+              env:
+                - name: BOT_TOKEN
+                  valueFrom:
+                    secretKeyRef:
+                      name: discord-exporter-secret
+                      key: BOT_TOKEN
+                - name: CHANNELS
+                  valueFrom:
+                    secretKeyRef:
+                      name: discord-exporter-secret
+                      key: CHANNELS
+                - name: LOOKBACK_DAYS
+                  value: "1"
+              securityContext:
+                allowPrivilegeEscalation: false
+                readOnlyRootFilesystem: false
+                capabilities:
+                  drop:
+                    - ALL
+              volumeMounts:
+                - name: export-out
+                  mountPath: /out
+
+          containers:
+            - name: uploader
+              image: curlimages/curl:8.5.0
+              command: ["/bin/sh", "/scripts/run-exporter.sh"]
+              env:
+                - name: SERVICE_URL
+                  value: "http://discord-bot-service.discord-bot.svc.cluster.local:8080/upload"
+              securityContext:
+                allowPrivilegeEscalation: false
+                readOnlyRootFilesystem: false
+                capabilities:
+                  drop:
+                    - ALL
+              volumeMounts:
+                - name: script-volume
+                  mountPath: /scripts
+                - name: export-out
+                  mountPath: /out
+
+          volumes:
+            - name: script-volume
+              configMap:
+                name: discord-exporter-script
+                defaultMode: 0755
+            - name: export-out
+              emptyDir: {}
