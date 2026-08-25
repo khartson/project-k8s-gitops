@@ -35,7 +35,7 @@ spec:
                   AFTER_DATE=$(date -u -d "@$(($(date +%s) - 93600))" +'%Y-%m-%dT%H:%M:%S')
                   echo "Exporting channels for messages after: ${AFTER_DATE}"
 
-                  DiscordChatExporter.Cli export \
+                  /opt/app/DiscordChatExporter.Cli export \
                     -t "${BOT_TOKEN}" \
                     -c ${CHANNELS} \
                     -f Json \
