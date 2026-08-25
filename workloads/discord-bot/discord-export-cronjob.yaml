@@ -29,10 +29,10 @@ spec:
             - name: exporter
               image: tyrrrz/discordchatexporter:2.47.3
               command: ["/bin/sh", "-c"]
-              args:
+               args:
                 - |
                   set -e
-                  AFTER_DATE=$(date -u -d "${LOOKBACK_DAYS:-1} days ago 2 hours ago" +'%Y-%m-%d %H:%M:%S')
+                  AFTER_DATE=$(date -u -d "@$(($(date +%s) - 93600))" +'%Y-%m-%dT%H:%M:%S')
                   echo "Exporting channels for messages after: ${AFTER_DATE}"
 
                   DiscordChatExporter.Cli export \
@@ -41,6 +41,7 @@ spec:
                     -f Json \
                     -o "/out/%g/%c.json" \
                     --after "${AFTER_DATE}"
+
               env:
                 - name: BOT_TOKEN
                   valueFrom:
