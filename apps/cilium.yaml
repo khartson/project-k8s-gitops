@@ -22,7 +22,7 @@ spec:
         mtu: 1450
         routingMode: native
         autoDirectNodeRouting: true
-        ipv4NativeRoutingCIDR: "10.0.0.0/16"
+        ipv4NativeRoutingCIDR: "10.244.0.0/16"
         securityContext:
           capabilities:
             ciliumAgent:

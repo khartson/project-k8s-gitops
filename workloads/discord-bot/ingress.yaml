@@ -5,6 +5,9 @@ metadata:
   namespace: discord-bot
 spec:
   ingressClassName: tailscale
+  tls:
+    - hosts:
+        - discord-bot
   defaultBackend:
     service:
       name: discord-bot-service
