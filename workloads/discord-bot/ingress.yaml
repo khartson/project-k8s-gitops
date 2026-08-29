@@ -5,11 +5,17 @@ metadata:
   namespace: discord-bot
 spec:
   ingressClassName: tailscale
+  rules:
+    - host: discord-bot
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: discord-bot-service
+                port:
+                  number: 8080
   tls:
     - hosts:
         - discord-bot
-  defaultBackend:
-    service:
-      name: discord-bot-service
-      port:
-        number: 8080
