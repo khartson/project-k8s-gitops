@@ -1,0 +1,12 @@
+fullnameOverride: sealed-secrets-controller
+resources:
+  requests:
+    memory: 128Mi
+    cpu: 50m
+  limits:
+    memory: 256Mi
+    cpu: 100m
+keyrenewperiod: "720h"
+metrics:
+  serviceMonitor:
+    enabled: true
