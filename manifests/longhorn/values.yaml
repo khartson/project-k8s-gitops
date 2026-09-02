@@ -1,0 +1,12 @@
+preUpgradeChecker:
+  jobEnabled: false
+defaultSettings:
+  defaultReplicaCount: 1
+persistence:
+  defaultClassReplicaCount: 1
+ingress:
+  enabled: true
+  ingressClassName: tailscale
+  host: longhorn
+  tls: true
+  path: /
