@@ -1,0 +1,29 @@
+prometheus-node-exporter:
+  hostRootFsMount:
+    enabled: false
+
+prometheusOperator:
+  admissionWebhooks:
+    failurePolicy: Ignore
+
+grafana:
+  ingress:
+    enabled: true
+    ingressClassName: tailscale
+    hosts:
+      - grafana
+    tls:
+      - hosts:
+          - grafana
+
+prometheus:
+  ingress:
+    enabled: true
+    ingressClassName: tailscale
+    hosts:
+      - prometheus
+    paths:
+      - /
+    tls:
+      - hosts:
+          - prometheus
