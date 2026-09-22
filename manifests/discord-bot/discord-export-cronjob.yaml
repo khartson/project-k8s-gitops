@@ -18,6 +18,7 @@ spec:
           labels:
             app: discord-export
         spec:
+          automountServiceAccountToken: false
           restartPolicy: OnFailure
           securityContext:
             runAsUser: 1000
