@@ -4,4 +4,4 @@ namespace: argocd
 resources:
   # Upgrade one minor version at a time and read the upgrade notes first:
   # https://argo-cd.readthedocs.io/en/stable/operator-manual/upgrading/overview/
-  - https://raw.githubusercontent.com/argoproj/argo-cd/v3.5.7/manifests/install.yaml
+  - https://raw.githubusercontent.com/argoproj/argo-cd/v3.6.1/manifests/install.yaml
