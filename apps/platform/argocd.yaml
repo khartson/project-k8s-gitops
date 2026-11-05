@@ -1,0 +1,23 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: argocd
+  namespace: argocd
+  # No resources-finalizer: deleting this app must never delete Argo CD itself
+  annotations:
+    argocd.argoproj.io/sync-wave: "-3"
+spec:
+  project: default
+  source:
+    repoURL: https://github.com/khartson/project-k8s-gitops.git
+    targetRevision: HEAD
+    path: manifests/argocd
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: argocd
+  syncPolicy:
+    automated:
+      prune: false # a bad commit should not be able to remove Argo CD components
+      selfHeal: true
+    syncOptions:
+      - ServerSideApply=true # ApplicationSet CRD is too large for client-side apply

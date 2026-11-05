@@ -42,7 +42,7 @@ flowchart TD
 
 ## Deployed Components 
 
-- __ArgoCD:__ GitOps reconciliation 
+- __ArgoCD:__ GitOps reconciliation (self-managed from `manifests/argocd`)
 - __Cilium:__ Container networking 
 - __Longhorn:__ Persistent block storage 
 - __Tailscale Operator:__ Private ingress/service access
@@ -50,3 +50,13 @@ flowchart TD
 - __kube-prometheus-stack:__ Metrics and dashboards 
 - __Discord Bot:__ Application workload 
 - __Disciord export CronJob:__ Scheduled batch processing
+
+## Upgrading / Recovering ArgoCD
+
+ArgoCD manages itself through `apps/platform/argocd.yaml`. To upgrade, bump the version tag in `manifests/argocd/kustomization.yaml` one minor release at a time, after reading the [upgrade notes](https://argo-cd.readthedocs.io/en/stable/operator-manual/upgrading/overview/).
+
+If an upgrade leaves ArgoCD unable to sync itself, fix the tag and apply it by hand:
+
+```sh
+kubectl apply -k manifests/argocd --server-side --force-conflicts
+```
