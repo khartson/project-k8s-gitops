@@ -6,7 +6,24 @@ prometheusOperator:
   admissionWebhooks:
     failurePolicy: Ignore
 
+# Talos binds these to localhost, so they can never be scraped and only produce TargetDown alerts
+kubeControllerManager:
+  enabled: false
+kubeScheduler:
+  enabled: false
+kubeProxy:
+  enabled: false
+
 grafana:
+  # Fixed admin credentials from a SealedSecret (manifests/kube-prometheus-stack/secrets).
+  # Without this the chart generates a new password on every render, restarting Grafana.
+  admin:
+    existingSecret: grafana-admin
+    userKey: admin-user
+    passwordKey: admin-password
+  persistence:
+    enabled: true
+    size: 2Gi
   ingress:
     enabled: true
     ingressClassName: tailscale
@@ -17,6 +34,16 @@ grafana:
           - grafana
 
 prometheus:
+  prometheusSpec:
+    retentionSize: 8GB # stay under the 10Gi volume
+    storageSpec:
+      volumeClaimTemplate:
+        spec:
+          storageClassName: longhorn
+          accessModes: ["ReadWriteOnce"]
+          resources:
+            requests:
+              storage: 10Gi
   ingress:
     enabled: true
     ingressClassName: tailscale

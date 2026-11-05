@@ -22,6 +22,9 @@ spec:
     - repoURL: https://github.com/khartson/project-k8s-gitops.git
       targetRevision: HEAD
       ref: values
+    - repoURL: https://github.com/khartson/project-k8s-gitops.git
+      targetRevision: HEAD
+      path: manifests/kube-prometheus-stack/secrets
   syncPolicy:
     managedNamespaceMetadata:
       labels:
