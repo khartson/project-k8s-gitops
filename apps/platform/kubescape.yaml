@@ -16,11 +16,35 @@ spec:
         certificates:
           strategy: initContainer # Important - prevents ArgoCD drift!
         clusterName: 'project-k8s' # add cluster name
+        capabilities:
+          runtimeDetection: enable # proactive runtime threat alerts from node-agent
+        # Requests trimmed to fit the 1 vCPU worker; limits left at chart defaults
+        kubescape:
+          resources:
+            requests:
+              cpu: 50m
+        kubevuln:
+          resources:
+            requests:
+              cpu: 50m
+              ephemeral-storage: 2Gi
+        storage:
+          resources:
+            requests:
+              cpu: 50m
+        nodeAgent:
+          resources:
+            requests:
+              cpu: 50m
         # imagePullSecrets: "" # reference to existing secret in same namespace
         # credentials:
         #   cloudSecret: "" # reference to existing secret in same namespace, contains `account` & `accessKey`
   project: default
   syncPolicy:
+    managedNamespaceMetadata:
+      labels:
+        # node-agent needs hostPID, hostPath and extra capabilities for eBPF runtime monitoring
+        pod-security.kubernetes.io/enforce: privileged
     syncOptions:
       - CreateNamespace=true
       - RespectIgnoreDifferences=true
